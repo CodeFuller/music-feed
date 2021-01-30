@@ -4,7 +4,7 @@ option csharp_namespace = "UpdatesService.Grpc";
 
 // The service for getting updates on music releases.
 service UpdatesService {
-  // Returns new muisic releases for requested user.
+  // Returns new music releases for requested user.
   rpc GetNewReleases (NewReleasesRequest) returns (NewReleasesResponse);
 }
 

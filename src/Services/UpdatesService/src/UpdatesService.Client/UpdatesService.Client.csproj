@@ -3,6 +3,28 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
+    <CurrentVersion>0.0.1</CurrentVersion>
+    <VersionPrefix>$(CurrentVersion)</VersionPrefix>
+    <!-- VersionSuffix is set to "preview" by CI server for non-default branches -->
+    <VersionSuffix>preview-005</VersionSuffix>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>CodeFuller.MusicFeed.UpdatesService.Client</PackageId>
+    <Description>gRPC client for UpdatesService in MusicFeed project.</Description>
+    <PackageTags>CodeFuller MusicFeed UpdatesService Client gRPC</PackageTags>
+    <Authors>CodeFuller</Authors>
+    <Company>CodeFuller</Company>
+    <Copyright>Copyright © 2021 CodeFuller</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageIcon>NuGets.png</PackageIcon>
+    <RepositoryUrl>https://github.com/CodeFuller/music-feed</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -19,8 +41,14 @@
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.14.0" />
     <PackageReference Include="Grpc.Net.Client" Version="2.34.0" />
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.34.0" />
     <PackageReference Include="Grpc.Tools" Version="2.35.0" PrivateAssets="all" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.321" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../../../../icons/NuGets.png" Pack="true" PackagePath="" />
+    <None Include="../../LICENSE.txt" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

@@ -17,7 +17,6 @@ namespace UpdatesService.Services
 					{
 						new()
 						{
-							// CF TEMP: Year must be optional.
 							Id = "1",
 							Year = 2000,
 							Title = "Don't Give Me Names",
