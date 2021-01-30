@@ -1,27 +1,43 @@
+using System;
+using GraphQL.Server;
+using GraphQL.Server.Ui.Playground;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PublicApiService.GraphQL;
+using PublicApiService.Interfaces;
+using PublicApiService.Internal;
 
 namespace PublicApiService
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+		private readonly IConfiguration configuration;
+
+		private readonly IWebHostEnvironment environment;
+
+		public Startup(IConfiguration configuration, IWebHostEnvironment environment)
 		{
-			Configuration = configuration;
+			this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+			this.environment = environment ?? throw new ArgumentNullException(nameof(environment));
 		}
 
-		public IConfiguration Configuration { get; }
-
-		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddControllers();
+			services.AddScoped<ApiSchema>();
+			services.AddScoped<ApiQuery>();
+
+			services.AddScoped<INewReleasesProvider, NewReleasesProvider>();
+
+			services.AddGraphQL()
+				.AddSystemTextJson()
+				.AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = environment.IsDevelopment())
+				.AddDataLoader()
+				.AddGraphTypes(ServiceLifetime.Scoped);
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			if (env.IsDevelopment())
@@ -29,14 +45,8 @@ namespace PublicApiService
 				app.UseDeveloperExceptionPage();
 			}
 
-			app.UseRouting();
-
-			app.UseAuthorization();
-
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllers();
-			});
+			app.UseGraphQL<ApiSchema>();
+			app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
 		}
 	}
 }
