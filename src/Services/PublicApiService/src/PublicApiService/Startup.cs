@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using PublicApiService.GraphQL;
 using PublicApiService.Interfaces;
 using PublicApiService.Internal;
+using UpdatesService.Client;
 
 namespace PublicApiService
 {
@@ -36,6 +37,12 @@ namespace PublicApiService
 				.AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = environment.IsDevelopment())
 				.AddDataLoader()
 				.AddGraphTypes(ServiceLifetime.Scoped);
+
+			services.AddUpdatesServiceClient(o =>
+			{
+				// TODO: Read service address from settings.
+				o.Address = new Uri("http://localhost:5000");
+			});
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

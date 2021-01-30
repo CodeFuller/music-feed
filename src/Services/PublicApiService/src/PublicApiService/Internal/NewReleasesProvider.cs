@@ -1,40 +1,41 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Grpc.Net.Client;
 using PublicApiService.Interfaces;
 using PublicApiService.Models;
+using UpdatesService.Client;
+using UpdatesService.Grpc;
 
 namespace PublicApiService.Internal
 {
 	public class NewReleasesProvider : INewReleasesProvider
 	{
-		public Task<IReadOnlyCollection<ReleaseModel>> GetNewReleases(CancellationToken cancellationToken)
+		private readonly IUpdatesServiceClient serviceClient;
+
+		public NewReleasesProvider(IUpdatesServiceClient serviceClient)
 		{
-			var releases = new[]
+			this.serviceClient = serviceClient ?? throw new ArgumentNullException(nameof(serviceClient));
+		}
+
+		public async Task<IReadOnlyCollection<ReleaseModel>> GetNewReleases(CancellationToken cancellationToken)
+		{
+			var request = new NewReleasesRequest
 			{
-				new ReleaseModel
-				{
-					Id = new IdModel("1"),
-					Year = 2000,
-					Title = "Don't Give Me Names",
-				},
-
-				new ReleaseModel
-				{
-					Id = new IdModel("2"),
-					Year = 2009,
-					Title = "Shallow Life",
-				},
-
-				new ReleaseModel
-				{
-					Id = new IdModel("3"),
-					Year = 1998,
-					Title = "How To Measure A Planet",
-				},
+				UserId = "TestUser",
 			};
 
-			return Task.FromResult<IReadOnlyCollection<ReleaseModel>>(releases);
+			var response = await serviceClient.GetNewReleasesAsync(request, cancellationToken: cancellationToken);
+
+			return response.NewReleases.Select(x => new ReleaseModel
+				{
+					Id = new IdModel(x.Id),
+					Year = x.Year,
+					Title = x.Title,
+				})
+				.ToList();
 		}
 	}
 }
