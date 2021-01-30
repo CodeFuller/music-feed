@@ -13,7 +13,6 @@ namespace UpdatesService
 			services.AddGrpc();
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			if (env.IsDevelopment())
@@ -25,7 +24,7 @@ namespace UpdatesService
 
 			app.UseEndpoints(endpoints =>
 			{
-				endpoints.MapGrpcService<GreeterService>();
+				endpoints.MapGrpcService<Services.UpdatesService>();
 
 				endpoints.MapGet("/", async context =>
 				{
