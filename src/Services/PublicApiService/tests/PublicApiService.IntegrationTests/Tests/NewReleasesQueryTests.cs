@@ -10,7 +10,7 @@ namespace PublicApiService.IntegrationTests.Tests
 	public class NewReleasesQueryTests
 	{
 		[TestMethod]
-		public async Task ArtistsQuery_ReturnsCorrectData()
+		public async Task NewReleasesQuery_ReturnsCorrectData()
 		{
 			// Arrange
 
