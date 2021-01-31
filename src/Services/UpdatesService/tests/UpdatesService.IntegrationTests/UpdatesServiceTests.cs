@@ -46,8 +46,7 @@ namespace UpdatesService.IntegrationTests
 			};
 
 			using var factory = new CustomWebApplicationFactory();
-			using var channel = factory.CreateGrpcChannel();
-			var client = new Grpc.UpdatesService.UpdatesServiceClient(channel);
+			var client = factory.CreateServiceClient();
 
 			// Act
 
