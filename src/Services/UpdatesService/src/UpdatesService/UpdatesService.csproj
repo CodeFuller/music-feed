@@ -10,6 +10,9 @@
     <CodeAnalysisRuleSet>../../UpdatesService.src.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
+    <UserSecretsId>d83190e7-b1d6-4b9e-a1ed-811e6d594879</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
