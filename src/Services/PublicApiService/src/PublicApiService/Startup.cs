@@ -40,8 +40,13 @@ namespace PublicApiService
 
 			services.AddUpdatesServiceClient(o =>
 			{
-				// TODO: Read service address from settings.
-				o.Address = new Uri("http://localhost:5000");
+				var updatesServiceAddress = configuration["services:updatesServiceAddress"];
+				if (String.IsNullOrEmpty(updatesServiceAddress))
+				{
+					throw new InvalidOperationException("The address of UpdatesService is not configured");
+				}
+
+				o.Address = new Uri(updatesServiceAddress);
 			});
 		}
 
