@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+
+  api-service:
+    image: musicfeed/api-service:latest
+    depends_on:
+      - updates-service
+
+  updates-service:
+    image: musicfeed/updates-service:latest
