@@ -4,8 +4,14 @@ services:
 
   api-service:
     image: musicfeed/api-service:latest
+    build:
+      context: Services/PublicApiService
+      dockerfile: src/PublicApiService/Dockerfile
     depends_on:
       - updates-service
 
   updates-service:
     image: musicfeed/updates-service:latest
+    build:
+      context: Services/UpdatesService
+      dockerfile: src/UpdatesService/Dockerfile
