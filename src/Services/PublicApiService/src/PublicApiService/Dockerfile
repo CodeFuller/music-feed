@@ -1,19 +1,23 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
-WORKDIR /app
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-WORKDIR /project
-COPY ["src/PublicApiService/PublicApiService.csproj", "src/PublicApiService/"]
-RUN dotnet restore "src/PublicApiService/PublicApiService.csproj"
-COPY . .
-WORKDIR "/project/src/PublicApiService"
-RUN dotnet build "PublicApiService.csproj" --no-restore -c Release -o /app/build
+
+COPY ["src/PublicApiService/PublicApiService.csproj", "/project/src/PublicApiService/"]
+COPY ["tests/PublicApiService.IntegrationTests/PublicApiService.IntegrationTests.csproj", "/project/tests/PublicApiService.IntegrationTests/"]
+COPY ["PublicApiService.sln", "/project/"]
+RUN dotnet restore "/project/PublicApiService.sln"
+
+COPY . "/project/"
+
+RUN dotnet build "/project/PublicApiService.sln" --no-restore -c Release
+
+RUN dotnet test "/project/PublicApiService.sln" --no-build -c Release
 
 FROM build AS publish
-RUN dotnet publish "PublicApiService.csproj" --no-restore -c Release -o /app/publish
+RUN dotnet publish "/project/src/PublicApiService/PublicApiService.csproj" --no-restore -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=publish /app/publish /app
 ENTRYPOINT ["dotnet", "PublicApiService.dll"]

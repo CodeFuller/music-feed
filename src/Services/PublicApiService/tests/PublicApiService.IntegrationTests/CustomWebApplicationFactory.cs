@@ -11,14 +11,19 @@ namespace PublicApiService.IntegrationTests
 {
 	public class CustomWebApplicationFactory : WebApplicationFactory<Startup>
 	{
+		private static bool RunsInsideContainer => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
+
 		protected override void ConfigureWebHost(IWebHostBuilder builder)
 		{
 			base.ConfigureWebHost(builder);
 
 			builder.ConfigureAppConfiguration(configBuilder =>
 			{
-				configBuilder
-					.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("services:updatesServiceAddress", "http://localhost:8102/") });
+				if (RunsInsideContainer)
+				{
+					configBuilder
+						.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("services:updatesServiceAddress", "http://updates-service/") });
+				}
 			});
 		}
 

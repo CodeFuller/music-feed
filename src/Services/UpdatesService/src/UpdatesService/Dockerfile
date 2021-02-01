@@ -1,19 +1,25 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
-WORKDIR /app
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-WORKDIR /project
-COPY ["src/UpdatesService/UpdatesService.csproj", "src/UpdatesService/"]
-RUN dotnet restore "src/UpdatesService/UpdatesService.csproj"
-COPY . .
-WORKDIR "/project/src/UpdatesService"
-RUN dotnet build "UpdatesService.csproj" --no-restore -c Release -o /app/build
+
+COPY ["src/UpdatesService/UpdatesService.csproj", "/project/src/UpdatesService/"]
+# UpdatesService.Client is not published within an image, but this project is used by UpdatesService.IntegrationTests
+COPY ["src/UpdatesService.Client/UpdatesService.Client.csproj", "/project/src/UpdatesService.Client/"]
+COPY ["tests/UpdatesService.IntegrationTests/UpdatesService.IntegrationTests.csproj", "/project/tests/UpdatesService.IntegrationTests/"]
+COPY ["UpdatesService.sln", "/project/"]
+RUN dotnet restore "/project/UpdatesService.sln"
+
+COPY . "/project/"
+
+RUN dotnet build "/project/UpdatesService.sln" --no-restore -c Release
+
+RUN dotnet test "/project/UpdatesService.sln" --no-build -c Release
 
 FROM build AS publish
-RUN dotnet publish "UpdatesService.csproj" --no-restore -c Release -o /app/publish
+RUN dotnet publish "/project/src/UpdatesService/UpdatesService.csproj" --no-restore -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=publish /app/publish /app
 ENTRYPOINT ["dotnet", "UpdatesService.dll"]

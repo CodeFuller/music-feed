@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.5'
 
 services:
 
@@ -7,6 +7,7 @@ services:
     build:
       context: Services/PublicApiService
       dockerfile: src/PublicApiService/Dockerfile
+      network: musicfeed-test-network
     depends_on:
       - updates-service
 
@@ -15,3 +16,4 @@ services:
     build:
       context: Services/UpdatesService
       dockerfile: src/UpdatesService/Dockerfile
+      network: musicfeed-test-network
