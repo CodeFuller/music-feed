@@ -12,7 +12,7 @@ COPY . "/project/"
 
 RUN dotnet build "/project/PublicApiService.sln" --no-restore -c Release
 
-RUN dotnet test "/project/PublicApiService.sln" --no-build -c Release
+RUN dotnet test "/project/PublicApiService.sln" --no-build -c Release --logger "trx;LogFileName=PublicApiService.trx" 
 
 FROM build AS publish
 RUN dotnet publish "/project/src/PublicApiService/PublicApiService.csproj" --no-restore -c Release -o /app/publish

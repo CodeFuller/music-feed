@@ -14,7 +14,7 @@ COPY . "/project/"
 
 RUN dotnet build "/project/UpdatesService.sln" --no-restore -c Release
 
-RUN dotnet test "/project/UpdatesService.sln" --no-build -c Release
+RUN dotnet test "/project/UpdatesService.sln" --no-build -c Release --logger "trx;LogFileName=UpdatesService.trx" 
 
 FROM build AS publish
 RUN dotnet publish "/project/src/UpdatesService/UpdatesService.csproj" --no-restore -c Release -o /app/publish
