@@ -3,7 +3,7 @@ version: '3.5'
 services:
 
   api-service:
-    image: musicfeed-api-service:latest
+    image: codefuller/musicfeed-api-service:latest
     build:
       context: Services/PublicApiService
       dockerfile: src/PublicApiService/Dockerfile
@@ -12,7 +12,7 @@ services:
       - updates-service
 
   updates-service:
-    image: musicfeed-updates-service:latest
+    image: codefuller/musicfeed-updates-service:latest
     build:
       context: Services/UpdatesService
       dockerfile: src/UpdatesService/Dockerfile

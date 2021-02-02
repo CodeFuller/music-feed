@@ -3,7 +3,7 @@ version: '3.5'
 services:
 
   updates-service:
-    image: musicfeed-updates-service:latest
+    image: codefuller/musicfeed-updates-service:latest
     networks:
       - musicfeed-test-network
     ports:
