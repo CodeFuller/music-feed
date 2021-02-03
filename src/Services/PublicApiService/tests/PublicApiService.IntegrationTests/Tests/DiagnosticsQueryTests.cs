@@ -20,6 +20,8 @@ namespace PublicApiService.IntegrationTests.Tests
 				{
 					UpdatesServiceAddress = ConfigurationProvider.UpdatesServiceAddress,
 				},
+
+				UpdatesService = new UpdatesServiceDiagnosticsData(),
 			};
 
 			var request = new GraphQLRequest
@@ -30,6 +32,9 @@ namespace PublicApiService.IntegrationTests.Tests
 						version
 						settings {
 							updatesServiceAddress
+						}
+						updatesService {
+							version
 						}
 					}
 				}",
@@ -51,9 +56,10 @@ namespace PublicApiService.IntegrationTests.Tests
 			// We do not compare version, because
 			// 1. It changes often, which will require frequent update of test data.
 			// 2. CI updates version with build number, so we can not predict it in test code.
-			diagnostics.Should().BeEquivalentTo(expectedData, o => o.Excluding(x => x.Version));
+			diagnostics.Should().BeEquivalentTo(expectedData, o => o.Excluding(x => x.Version).Excluding(x => x.UpdatesService.Version));
 
 			diagnostics.Version.Should().NotBeNullOrEmpty();
+			diagnostics.UpdatesService.Version.Should().NotBeNullOrEmpty();
 		}
 	}
 }
