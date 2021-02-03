@@ -25,6 +25,7 @@ namespace UpdatesService
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapGrpcService<Services.UpdatesService>();
+				endpoints.MapGrpcService<Services.DiagnosticsService>();
 
 				endpoints.MapGet("/", async context =>
 				{

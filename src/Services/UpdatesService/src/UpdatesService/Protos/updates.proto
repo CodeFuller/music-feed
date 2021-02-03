@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
 option csharp_namespace = "UpdatesService.Grpc";
 
 // The service for getting updates on music releases.
@@ -23,4 +25,15 @@ message MusicRelease {
 // The response message containing the new releases for the user.
 message NewReleasesResponse {
   repeated MusicRelease new_releases = 1;
+}
+
+// The service for getting application diagnostics.
+service UpdatesDiagnosticsService {
+	// Returns application diagnostics.
+	rpc GetDiagnostics (google.protobuf.Empty) returns (UpdatesDiagnosticsResponse);
+}
+
+// The response message containing the application diagnostics.
+message UpdatesDiagnosticsResponse {
+	string version = 1;
 }

@@ -8,8 +8,27 @@ namespace UpdatesService.IntegrationTests
 	{
 		private ServiceProvider ServiceProvider { get; set; }
 
-		public IUpdatesServiceClient CreateServiceClient()
+		public IUpdatesServiceClient CreateUpdatesServiceClient()
 		{
+			InitializeServiceProvider();
+
+			return ServiceProvider.GetRequiredService<IUpdatesServiceClient>();
+		}
+
+		public IUpdatesDiagnosticsServiceClient CreateDiagnosticsServiceClient()
+		{
+			InitializeServiceProvider();
+
+			return ServiceProvider.GetRequiredService<IUpdatesDiagnosticsServiceClient>();
+		}
+
+		private void InitializeServiceProvider()
+		{
+			if (ServiceProvider != null)
+			{
+				return;
+			}
+
 			var services = new ServiceCollection();
 
 			var httpClient = CreateClient();
@@ -21,8 +40,6 @@ namespace UpdatesService.IntegrationTests
 			});
 
 			ServiceProvider = services.BuildServiceProvider();
-
-			return ServiceProvider.GetRequiredService<IUpdatesServiceClient>();
 		}
 
 		protected override void Dispose(bool disposing)

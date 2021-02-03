@@ -46,7 +46,7 @@ namespace UpdatesService.IntegrationTests
 			};
 
 			using var factory = new CustomWebApplicationFactory();
-			var client = factory.CreateServiceClient();
+			var client = factory.CreateUpdatesServiceClient();
 
 			// Act
 

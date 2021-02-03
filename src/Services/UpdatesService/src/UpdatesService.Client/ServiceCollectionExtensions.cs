@@ -1,6 +1,7 @@
 ﻿using System;
 using Grpc.Net.ClientFactory;
 using Microsoft.Extensions.DependencyInjection;
+using UpdatesService.Grpc;
 
 namespace UpdatesService.Client
 {
@@ -18,7 +19,10 @@ namespace UpdatesService.Client
 		public static IServiceCollection AddUpdatesServiceClient(this IServiceCollection services, Action<GrpcClientFactoryOptions> configureClient)
 		{
 			services.AddGrpcClient<Grpc.UpdatesService.UpdatesServiceClient>(configureClient);
+			services.AddGrpcClient<UpdatesDiagnosticsService.UpdatesDiagnosticsServiceClient>(configureClient);
+
 			services.AddSingleton<IUpdatesServiceClient, Grpc.UpdatesService.UpdatesServiceClient>(sp => sp.GetRequiredService<Grpc.UpdatesService.UpdatesServiceClient>());
+			services.AddSingleton<IUpdatesDiagnosticsServiceClient, UpdatesDiagnosticsService.UpdatesDiagnosticsServiceClient>(sp => sp.GetRequiredService<UpdatesDiagnosticsService.UpdatesDiagnosticsServiceClient>());
 
 			return services;
 		}

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <CurrentVersion>0.0.2</CurrentVersion>
+    <CurrentVersion>0.0.3</CurrentVersion>
     <VersionPrefix>$(CurrentVersion)</VersionPrefix>
     <!-- VersionSuffix is set to "preview" by CI server for non-default branches -->
     <VersionSuffix></VersionSuffix>
