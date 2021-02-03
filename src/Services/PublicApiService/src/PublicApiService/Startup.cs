@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using PublicApiService.GraphQL;
 using PublicApiService.Interfaces;
 using PublicApiService.Internal;
+using PublicApiService.Settings;
 using UpdatesService.Client;
 
 namespace PublicApiService
@@ -31,6 +32,7 @@ namespace PublicApiService
 			services.AddScoped<ApiQuery>();
 
 			services.AddScoped<INewReleasesProvider, NewReleasesProvider>();
+			services.AddScoped<IDiagnosticsProvider, DiagnosticsProvider>();
 
 			services.AddGraphQL()
 				.AddSystemTextJson()
@@ -38,15 +40,17 @@ namespace PublicApiService
 				.AddDataLoader()
 				.AddGraphTypes(ServiceLifetime.Scoped);
 
+			services.Configure<AppSettings>(configuration);
+
 			services.AddUpdatesServiceClient(o =>
 			{
-				var updatesServiceAddress = configuration["services:updatesServiceAddress"];
-				if (String.IsNullOrEmpty(updatesServiceAddress))
+				var settings = configuration.Get<AppSettings>();
+				if (settings.Services.UpdatesServiceAddress == null)
 				{
 					throw new InvalidOperationException("The address of UpdatesService is not configured");
 				}
 
-				o.Address = new Uri(updatesServiceAddress);
+				o.Address = settings.Services.UpdatesServiceAddress;
 			});
 		}
 
