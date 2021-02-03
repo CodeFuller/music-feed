@@ -3,7 +3,5 @@ version: '3.5'
 services:
 
   api-service:
-    environment:
-      - services:updatesServiceAddress=http://updates-service:80/
     ports:
       - "7101:80"
